@@ -1,0 +1,145 @@
+helm install apache bitnami/apache -namespace=web
+(apache-chartname  bitnami/apache=helmrepo web=namespace helm install=command)
+helm upgrade apache bitnami/apache -namespace=web
+helm rollback apache 1 -namespace=web
+helm uninstall apache 
+====================================================================
+Helm simplifies the kubernetes deployment process by abstracting out all the complexity
+
+https://bitnami.com/stacks/helm
+(charts)
+https://github.com/bitnami/charts/tree/master/bitnami
+(github charts)
+
+
+#!/bin/bash
+wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.2-linux-amd64.tar.gz
+tar -zxvf helm-v2.12.2-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/local/bin/helm
+kubectl -n kube-system create sa tiller
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+kubectl create namespace kubeapps
+helm install --name kubeapps --namespace kubeapps bitnami/kubeapps
+
+ersion.BuildInfo{Version:"v3.7.0-rc.3", GitCommit:"eeac83883cb4014fe60267ec6373570374ce770b", GitTreeState:"clean", GoVersion:"go1.16.7"}
+[root@master linux-amd64]# helm repo list
+Error: no repositories to show
+[root@master linux-amd64]# helm repo add bitnami https://charts.bitnami.com/bitnami
+"bitnami" has been added to your repositories
+[root@master linux-amd64]# helm repo list
+NAME    URL
+bitnami https://charts.bitnami.com/bitnami
+[root@master linux-amd64]# helm search repo apache
+NAME                            CHART VERSION   APP VERSION     DESCRIPTION
+bitnami/apache                  8.8.5           2.4.51          Chart for Apache HTTP Server
+bitnami/airflow                 11.1.5          2.2.0           Apache Airflow is a platform to programmaticall...
+bitnami/cassandra               9.0.4           4.0.1           Apache Cassandra is a free and open-source dist...
+bitnami/geode                   0.3.2           1.14.0          Apache Geode is a data management platform that...
+bitnami/kafka                   14.2.4          2.8.1           Apache Kafka is a distributed streaming platform.
+bitnami/solr                    2.1.1           8.10.1          Apache Solr is an open source enterprise search...
+bitnami/tomcat                  9.5.2           10.0.12         Chart for Apache Tomcat
+bitnami/dataplatform-bp1        8.0.2           0.0.11          OCTO Data platform Kafka-Spark-Solr Helm Chart
+bitnami/dataplatform-bp2        8.0.5           0.0.11          OCTO Data platform Kafka-Spark-Elasticsearch He...
+bitnami/spark                   5.7.7           3.2.0           Spark is a fast and general-purpose cluster com...
+[root@master linux-amd64]# helm search repo redis
+NAME                    CHART VERSION   APP VERSION     DESCRIPTION
+bitnami/redis           15.5.1          6.2.6           Open source, advanced key-value store. It is of...
+bitnami/redis-cluster   7.0.7           6.2.6           Open source, advanced key-value store. It is of...
+[root@master linux-amd64]# helm search repo nodejs
+NAME            CHART VERSION   APP VERSION     DESCRIPTION
+bitnami/ghost   15.0.7          4.20.3          A simple, powerful publishing platform that all...
+bitnami/mean    6.1.2           4.6.2           DEPRECATED MEAN is a free and open-source JavaS...
+bitnami/node    15.2.31         14.18.1         Event-driven I/O server-side JavaScript environ...
+[root@master linux-amd64]# helm repo remove bitnami
+"bitnami" has been removed from your repositories
+[root@master linux-amd64]# helm repo list
+Error: no repositories to show
+[root@master linux-amd64]#
+============================================================================================
+*********COMMANDS TO REMEMBER**************************************
+helm repo list
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+helm repo list
+
+helm repo remove bitnami
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+
+Search the repository:
+
+helm search repo mysql
+
+helm search repo database
+
+helm search repo database --versions
+
+
+Install a package:
+
+kubectl get pods
+
+(Below Two commands - In a Different Shell/Commandline window/tab)
+
+minikube ssh
+
+docker images
+
+helm install mydb bitnami/mysql
+
+Check the cluster:
+
+kubectl get pods
+
+minikube ssh
+
+docker images
+
+To check the installation status:
+
+helm status mydb
+
+
+
+--------------------------------------------
+
+To Upgrade:
+
+ROOT_PASSWORD=$(kubectl get secret --namespace default mydb-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+
+helm upgrade --namespace default mysql-release bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
+
+-------
+
+helm uninstall mysql-release
+
+===========================================================================================================
+####helm install process
+helm create firstchart (chartname)
+[root@master firstchart]# ls
+charts  Chart.yaml  templates  values.yaml
+for example looover into Chart.yaml------------vi Chart.yaml
+
+pwd-/root/helmcharts/firstchart
+[root@master firstchart]# helm install nginx /root/helmcharts/firstchart
+NAME: nginx
+LAST DEPLOYED: Wed Nov  3 03:43:36 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=firstchart,app.kubernetes.io/instance=nginx" -o jsonpath="{.items[0].metadata.name}")
+  
+export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  
+echo "Visit http://127.0.0.1:8080 to use your application"
+  
+kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+[root@master firstchart]#
+
+
+
+

@@ -1,0 +1,7 @@
+{
+    "projectList": {
+        "ARGO_NAMESPACE_WITHOUT_ENV": "rules",
+        "DOCKER_REPO": "com/csg/focon/images",
+        "EMAIL": "ranjan.soumya@gmail.com"
+    }
+}

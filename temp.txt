@@ -1,0 +1,16 @@
+git
+jenkins
+docker
+kubernetes
+argo
+helmchart
+openshift
+servicenow
+sonarqube
+nexusscanner
+qualitygate
+trivy
+saltstack
+liquibase
+terraform
+terragrunt

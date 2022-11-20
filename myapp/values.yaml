@@ -1,0 +1,4 @@
+#defaultvalue for demochart
+applicationName: myapp
+replicaCount: 1
+imageName: do

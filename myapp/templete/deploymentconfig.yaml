@@ -1,0 +1,13 @@
+apiVersion: apps.openshift
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: {{ .Value.appname}}
+  name: {{ .Value.appname}}
+spec:
+  replicas: {{ .Values.replicaCount}}
+  templete:
+    metadata:
+     annotations:
+       rollme: {{ randAlphaNum 5}}
+       

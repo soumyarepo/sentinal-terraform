@@ -1,0 +1,22 @@
+apiVersion: route.openshift
+kind: Route 
+metadata:
+  labels:
+    app: {{.Value.appname}}
+  name: {{.Value.appname}}-route
+
+spec:
+  host: {{ .Value.appname}}-{{ .Realese .Namespace}}.apps.ocp-3-us-{{values.serverlocation}}
+  port: 
+    targetport: {{ .values.targetPort}}-tcp
+  to:
+     kind: Service
+     metadata:
+       name: myapp
+     spec:
+       selector:
+         app: myapp
+       ports:
+       - port: <Port>
+         targetPort: <Target Port>
+       

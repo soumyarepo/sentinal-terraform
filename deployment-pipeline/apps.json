@@ -1,0 +1,23 @@
+{
+    "projectList": [
+        {
+            "baseSetting": {
+                "ARGO_NAMESPACE_WITHOUT_ENV": "proplng-sheduler",
+                "DOCKER_REPO": "com/csg/ib/cts/proplng/images/pss",
+                "EMAIL": "ranjan.soumya@gmail.com"
+            },
+            "applications": {
+                "proplsimpleschudler": {
+                    "dev": {
+                        "TARGET_ARGO_SERVER": ["pri"],
+                        "ARO_HELM_DEPLYOMENT_NAME": "scheduler",
+                        "TARGET_SERVER": "argo-aro",
+                        
+                    }
+                }
+            }
+        }
+    ]
+
+    
+}

@@ -1,0 +1,66 @@
+libraray(
+    identifier: 'jenkins-shared-library@master',
+    retriver: legacySCM9[
+        $class: 'GitSCM',
+        userRemoteConfigs: [[
+            credentials: ' ',
+            url:
+        ]]
+    ]
+)
+
+
+
+
+pipeline{
+    agent none
+
+     parameters {
+         choice(name: 'SOFTWARE_COMPONENT', choices: [
+             "control",
+             "rules",
+             "web"
+             
+
+         ], description: '')
+         choice('ENV', choices: ["uat", "prod"],description: 'Enviornment' )
+     }
+     enviornment {
+         EX_BRANCH_NAME = 'master'
+     }
+
+     stages {
+         stage('Git branch check') {
+             agent {
+                 label 'docker'
+             }
+             option {
+                 skipDefaultCheckout true
+             }
+         }
+         stage('reading *_apps.json') {
+             agent {
+                 label 'docker'
+             }
+             options {
+                  skipDefaultCheckout true
+             }
+             steps {
+                 def appFound = false
+
+                 fileList.each { jsonFile ->
+                    if (appFound) {
+                        appFound = readJsonFile(jsonfile)
+                    }
+                 }
+                 if(!appFound) {
+                     echo('Abroting the build')
+                     currentBuild.result = 'ABORTED'
+                     error("Application ${params.SOFTWARE_COMPNENT} wasn't found at json files.")
+                 }
+             }
+         }
+     }
+     
+
+}
